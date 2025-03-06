@@ -10,6 +10,8 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+builder.Services.AddCors();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -24,7 +26,9 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+// Configurint the CORS policy
+app.UseCors(x=> x.AllowAnyHeader().AllowAnyMethod()
+.WithOrigins("http://localhost:3000", "https://localhost:3000"));
 app.MapControllers();
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
